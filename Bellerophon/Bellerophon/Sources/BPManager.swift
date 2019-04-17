@@ -19,7 +19,7 @@ public class BellerophonManager: NSObject {
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(stopTimer),
-                                               name: NSNotification.Name.UIApplicationDidEnterBackground,
+                                               name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
     }
 
@@ -38,7 +38,7 @@ public class BellerophonManager: NSObject {
     // MARK: internal properties
     internal lazy var killSwitchWindow: UIWindow = {
         let window = BellerophonHelperMethods.newWindow()
-        window.windowLevel = UIWindowLevelAlert
+        window.windowLevel = UIWindow.Level.alert
         let rootViewController = UIViewController()
         rootViewController.view.addSubview(self.killSwitchView)
         window.rootViewController = rootViewController
@@ -52,7 +52,7 @@ public class BellerophonManager: NSObject {
     /**
      Retrieves and handles the app status from the AMS endpoint
      */
-    public func checkAppStatus() {
+    @objc public func checkAppStatus() {
         assert(killSwitchView != nil, "The kill switch view has to be defined.")
 
         if requestPending {
@@ -108,7 +108,7 @@ public class BellerophonManager: NSObject {
         }
     }
 
-    internal func stopTimer() {
+    @objc internal func stopTimer() {
         retryTimer?.invalidate()
         retryTimer = nil
     }
